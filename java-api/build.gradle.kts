@@ -209,6 +209,7 @@ tasks.javadoc {
 val shadowJar = tasks.register<ShadowJar>("shadowJar") {
     dependsOn(tasks.jar.get().taskDependencies)
     from(*((fromVersion..toVersion).map { sourceSets["java${it.ordinal + 1}"].output } + sourceSets.main.get().output).toTypedArray())
+    from(rootProject.sourceSets.getByName("shared").output)
 
     archiveClassifier.set("all")
 
