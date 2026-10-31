@@ -248,6 +248,9 @@ public class Java11Downgrader extends AllVersionDowngrader {
                                     case Opcodes.INVOKESPECIAL:
                                         method.instructions.set(insn, new MethodInsnNode(Opcodes.INVOKESPECIAL, methodInsn.owner, "jvmdowngrader$nest$" + methodInsn.owner.replace("/", "_") + "$" + methodInsn.name, methodInsn.desc, false));
                                         break;
+                                    case Opcodes.INVOKEINTERFACE:
+                                        method.instructions.set(insn, new MethodInsnNode(Opcodes.INVOKEINTERFACE, methodInsn.owner, "jvmdowngrader$nest$" + methodInsn.owner.replace("/", "_") + "$" + methodInsn.name, methodInsn.desc, true));
+                                        break;
                                     default:
                                         throw new RuntimeException("Unexpected opcode: " + insn.getOpcode());
                                 }
@@ -302,7 +305,7 @@ public class Java11Downgrader extends AllVersionDowngrader {
                         mv.visitVarInsn(arg.getOpcode(Opcodes.ILOAD), index);
                         index += arg.getSize();
                     }
-                    mv.visitMethodInsn(isStatic ? Opcodes.INVOKESTATIC : Opcodes.INVOKESPECIAL, clazz.name, name, desc, false);
+                    mv.visitMethodInsn(isStatic ? Opcodes.INVOKESTATIC : Opcodes.INVOKESPECIAL, clazz.name, name, desc, (clazz.access & Opcodes.ACC_INTERFACE) != 0);
                     if (returnType == Type.VOID_TYPE) {
                         mv.visitInsn(Opcodes.RETURN);
                     } else {
