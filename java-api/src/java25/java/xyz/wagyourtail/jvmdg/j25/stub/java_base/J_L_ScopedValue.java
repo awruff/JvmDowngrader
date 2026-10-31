@@ -5,13 +5,12 @@ import xyz.wagyourtail.jvmdg.version.JEP;
 
 import java.util.*;
 import java.util.function.Supplier;
-import java.util.random.RandomGenerator;
 
 @JEP(506)
 @Adapter("java/lang/ScopedValue")
 public class J_L_ScopedValue<T> {
     // TODO: make this better
-    private static final RandomGenerator KEY_GENERATOR = new Random();
+    private static final Random KEY_GENERATOR = new Random();
     private final int hash = generateHash();
 
     private static synchronized int generateHash() {
